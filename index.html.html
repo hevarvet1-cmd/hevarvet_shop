@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Hevarvet Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#2d4a3e;
+    --bg2:#1e332a;
+    --bg3:#3a5c4e;
+    --card:#243d30;
+    --card2:#1a2e22;
+    --accent:#a8d5a2;
+    --accent2:#7fbf7b;
+    --gold:#e2c97e;
+    --gold2:#c9a84c;
+    --text:#eef5ec;
+    --text2:#b0cca8;
+    --border:#3f5e50;
+    --red:#e06c75;
+    --shadow:0 8px 32px rgba(0,0,0,0.4);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-track{background:var(--bg2);}
+  ::-webkit-scrollbar-thumb{background:var(--accent2);border-radius:3px;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(30,51,42,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;}
+  .nav-inner{max-width:1400px;margin:auto;display:flex;align-items:center;justify-content:space-between;height:70px;}
+  .logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--gold);letter-spacing:1px;cursor:pointer;text-decoration:none;}
+  .logo span{color:var(--accent);}
+  .nav-links{display:flex;gap:0.2rem;list-style:none;flex-wrap:wrap;}
+  .nav-links a{color:var(--text2);text-decoration:none;font-size:0.82rem;font-weight:500;padding:0.4rem 0.7rem;border-radius:6px;transition:all 0.2s;letter-spacing:0.3px;}
+  .nav-links a:hover,.nav-links a.active{color:var(--accent);background:rgba(168,213,162,0.1);}
+  .nav-cart{background:var(--gold);color:var(--bg2);border:none;padding:0.45rem 1rem;border-radius:20px;font-weight:600;font-size:0.82rem;cursor:pointer;transition:all 0.2s;}
+  .nav-cart:hover{background:var(--gold2);}
+
+  /* PAGES */
+  .page{display:none;min-height:100vh;padding-top:70px;}
+  .page.active{display:block;}
+
+  /* HERO */
+  .hero{min-height:calc(100vh - 70px);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--bg2) 0%,var(--bg) 50%,var(--bg3) 100%);}
+  .hero-bg-circles{position:absolute;inset:0;pointer-events:none;}
+  .circle{position:absolute;border-radius:50%;opacity:0.08;}
+  .c1{width:600px;height:600px;background:var(--accent);top:-100px;right:-100px;animation:float1 8s ease-in-out infinite;}
+  .c2{width:400px;height:400px;background:var(--gold);bottom:-80px;left:-80px;animation:float2 10s ease-in-out infinite;}
+  .c3{width:250px;height:250px;background:var(--accent2);top:50%;left:50%;animation:float3 6s ease-in-out infinite;}
+  @keyframes float1{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,30px);}}
+  @keyframes float2{0%,100%{transform:translate(0,0);}50%{transform:translate(20px,-20px);}}
+  @keyframes float3{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.1);}}
+  .hero-content{text-align:center;z-index:2;padding:2rem;animation:heroIn 1s ease-out;}
+  @keyframes heroIn{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
+  .hero-tag{display:inline-block;background:rgba(168,213,162,0.15);border:1px solid var(--accent);color:var(--accent);font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;padding:0.35rem 1rem;border-radius:20px;margin-bottom:1.5rem;}
+  .hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;line-height:1.05;margin-bottom:1.2rem;}
+  .hero-title .line2{color:var(--gold);display:block;}
+  .hero-sub{color:var(--text2);font-size:1.05rem;max-width:500px;margin:0 auto 2.5rem;line-height:1.7;}
+  .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg2);padding:0.85rem 2.2rem;border-radius:30px;font-weight:700;font-size:0.95rem;border:none;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 20px rgba(168,213,162,0.3);}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(168,213,162,0.4);}
+  .btn-outline{background:transparent;color:var(--text);padding:0.85rem 2.2rem;border-radius:30px;font-weight:600;font-size:0.95rem;border:2px solid var(--border);cursor:pointer;transition:all 0.3s;}
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+  .hero-stats{display:flex;gap:3rem;justify-content:center;margin-top:3.5rem;flex-wrap:wrap;}
+  .stat{text-align:center;}
+  .stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--gold);}
+  .stat-label{color:var(--text2);font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-top:0.2rem;}
+
+  /* SECTION HEADERS */
+  .section-header{text-align:center;padding:3rem 2rem 2rem;}
+  .section-tag{display:inline-block;background:rgba(168,213,162,0.1);border:1px solid var(--accent2);color:var(--accent);font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;padding:0.3rem 0.9rem;border-radius:20px;margin-bottom:1rem;}
+  .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin-bottom:0.8rem;}
+  .section-sub{color:var(--text2);max-width:500px;margin:0 auto;line-height:1.6;font-size:0.95rem;}
+
+  /* SHOP PAGE */
+  #page-shop{background:var(--bg);}
+  .shop-controls{max-width:1400px;margin:0 auto;padding:1.5rem 2rem 1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;}
+  .search-box{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.7rem 1rem;color:var(--text);font-size:0.9rem;font-family:'DM Sans',sans-serif;outline:none;transition:border 0.2s;}
+  .search-box:focus{border-color:var(--accent);}
+  .search-box::placeholder{color:var(--text2);}
+  .filter-btns{display:flex;gap:0.5rem;flex-wrap:wrap;}
+  .filter-btn{background:var(--card);border:1px solid var(--border);color:var(--text2);padding:0.5rem 1rem;border-radius:20px;font-size:0.8rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+  .filter-btn:hover,.filter-btn.active{background:var(--accent);color:var(--bg2);border-color:var(--accent);}
+  .products-count{max-width:1400px;margin:0 auto;padding:0 2rem 0.5rem;color:var(--text2);font-size:0.85rem;}
+  .products-grid{max-width:1400px;margin:0 auto;padding:0.5rem 2rem 3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.2rem;}
+
+  /* PRODUCT CARD */
+  .product-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 0.3s;position:relative;animation:cardIn 0.4s ease both;}
+  @keyframes cardIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+  .product-card:hover{transform:translateY(-6px);border-color:var(--accent2);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+  .product-img-wrap{width:100%;height:180px;overflow:hidden;position:relative;background:var(--card2);}
+  .product-img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
+  .product-card:hover .product-img{transform:scale(1.08);}
+  .product-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--border);font-size:0.75rem;letter-spacing:1px;gap:0.5rem;}
+  .placeholder-icon{width:48px;height:48px;border:2px dashed var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .placeholder-icon svg{opacity:0.4;}
+  .product-badge{position:absolute;top:10px;left:10px;background:var(--gold);color:var(--bg2);font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:10px;}
+  .product-badge.new{background:var(--accent);}
+  .product-badge.sale{background:var(--red);color:#fff;}
+  .product-body{padding:1rem;}
+  .product-name{font-weight:600;font-size:0.92rem;margin-bottom:0.3rem;line-height:1.3;min-height:2.4rem;}
+  .product-name.empty{color:var(--border);font-style:italic;font-size:0.8rem;}
+  .product-desc{color:var(--text2);font-size:0.75rem;margin-bottom:0.8rem;line-height:1.4;min-height:2rem;}
+  .product-footer{display:flex;align-items:center;justify-content:space-between;gap:0.5rem;}
+  .price-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg2);border:none;padding:0.45rem 0.9rem;border-radius:20px;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.25s;white-space:nowrap;}
+  .price-btn:hover{transform:scale(1.05);box-shadow:0 4px 15px rgba(226,201,126,0.4);}
+  .price-btn.empty-btn{background:var(--card2);color:var(--border);border:1px dashed var(--border);cursor:default;}
+  .price-btn.empty-btn:hover{transform:none;box-shadow:none;}
+  .delete-btn{position:absolute;top:10px;right:10px;background:var(--red);border:none;color:#fff;width:28px;height:28px;border-radius:50%;font-size:1rem;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:5;}
+  .owner-active .delete-btn{display:flex;}
+  .delete-btn:hover{transform:scale(1.1);}
+
+  /* CATEGORIES PAGE */
+  #page-categories{background:var(--bg);}
+  .cats-grid{max-width:1200px;margin:0 auto;padding:1rem 2rem 4rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;}
+  .cat-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2rem;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;}
+  .cat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(168,213,162,0.06));pointer-events:none;}
+  .cat-card:hover{transform:translateY(-8px);border-color:var(--accent);box-shadow:0 16px 48px rgba(0,0,0,0.4);}
+  .cat-icon{width:70px;height:70px;margin:0 auto 1.2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .cat-name{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:0.5rem;color:var(--text);}
+  .cat-count{color:var(--text2);font-size:0.82rem;}
+
+  /* ABOUT PAGE */
+  #page-about{background:var(--bg);}
+  .about-wrap{max-width:900px;margin:0 auto;padding:2rem 2rem 5rem;}
+  .about-hero{text-align:center;padding:2rem 0 3rem;}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;}
+  @media(max-width:640px){.about-grid{grid-template-columns:1fr;}}
+  .about-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.8rem;}
+  .about-card h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);margin-bottom:0.8rem;}
+  .about-card p{color:var(--text2);line-height:1.7;font-size:0.9rem;}
+  .about-values{display:flex;flex-direction:column;gap:0.8rem;margin-top:1.5rem;}
+  .value-item{display:flex;align-items:center;gap:0.8rem;color:var(--text2);font-size:0.9rem;}
+  .value-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+
+  /* CONTACT PAGE */
+  #page-contact{background:var(--bg);}
+  .contact-wrap{max-width:700px;margin:0 auto;padding:2rem 2rem 5rem;}
+  .contact-form{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.5rem;margin-top:1rem;}
+  .form-group{margin-bottom:1.2rem;}
+  .form-group label{display:block;color:var(--text2);font-size:0.82rem;letter-spacing:0.5px;margin-bottom:0.4rem;}
+  .form-group input,.form-group textarea,.form-group select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:0.75rem 1rem;color:var(--text);font-size:0.9rem;font-family:'DM Sans',sans-serif;outline:none;transition:border 0.2s;resize:vertical;}
+  .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--accent);}
+  .form-group select option{background:var(--bg);}
+  .submit-btn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg2);border:none;padding:0.9rem;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.3s;margin-top:0.5rem;}
+  .submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(168,213,162,0.3);}
+  .contact-info{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;}
+  @media(max-width:500px){.contact-info{grid-template-columns:1fr;}}
+  .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;text-align:center;}
+  .info-card .label{color:var(--text2);font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.4rem;}
+  .info-card .val{color:var(--accent);font-weight:600;font-size:0.9rem;}
+
+  /* BLOG / NEWS PAGE */
+  .blog-grid{max-width:1100px;margin:0 auto;padding:1rem 2rem 4rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+  .blog-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 0.3s;}
+  .blog-card:hover{transform:translateY(-5px);border-color:var(--accent2);}
+  .blog-img{height:160px;background:linear-gradient(135deg,var(--bg2),var(--bg3));display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:0.8rem;}
+  .blog-body{padding:1.2rem;}
+  .blog-tag{display:inline-block;background:rgba(168,213,162,0.1);color:var(--accent);font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:10px;margin-bottom:0.6rem;}
+  .blog-title{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:0.5rem;line-height:1.4;}
+  .blog-excerpt{color:var(--text2);font-size:0.82rem;line-height:1.5;}
+  .blog-meta{margin-top:0.8rem;color:var(--border);font-size:0.75rem;}
+
+  /* FAQ PAGE */
+  .faq-wrap{max-width:750px;margin:0 auto;padding:1rem 2rem 5rem;}
+  .faq-item{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:0.8rem;overflow:hidden;transition:all 0.2s;}
+  .faq-q{padding:1.2rem 1.5rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:500;}
+  .faq-q:hover{color:var(--accent);}
+  .faq-arrow{font-size:1.2rem;transition:transform 0.3s;color:var(--text2);}
+  .faq-item.open .faq-arrow{transform:rotate(180deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding 0.2s;}
+  .faq-item.open .faq-a{max-height:300px;padding:0 1.5rem 1.2rem;}
+  .faq-a p{color:var(--text2);line-height:1.7;font-size:0.9rem;}
+
+  /* WISHLIST PAGE */
+  .wishlist-wrap{max-width:1000px;margin:0 auto;padding:2rem 2rem 5rem;}
+  .wishlist-empty{text-align:center;padding:4rem 2rem;color:var(--text2);}
+  .wishlist-empty svg{opacity:0.2;display:block;margin:0 auto 1rem;}
+  .wishlist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;margin-top:1rem;}
+
+  /* SERVICES PAGE */
+  .services-grid{max-width:1100px;margin:0 auto;padding:1rem 2rem 4rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem;}
+  .service-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;}
+  .service-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--gold));transform:scaleX(0);transition:transform 0.3s;}
+  .service-card:hover{transform:translateY(-5px);}
+  .service-card:hover::after{transform:scaleX(1);}
+  .service-icon{width:56px;height:56px;border-radius:14px;background:rgba(168,213,162,0.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;}
+  .service-name{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:0.6rem;}
+  .service-desc{color:var(--text2);font-size:0.85rem;line-height:1.6;}
+  .service-price{margin-top:1rem;color:var(--gold);font-weight:700;font-size:0.95rem;}
+
+  /* GALLERY PAGE */
+  .gallery-grid{max-width:1200px;margin:0 auto;padding:1rem 2rem 4rem;columns:4 220px;gap:1rem;}
+  .gallery-item{break-inside:avoid;margin-bottom:1rem;border-radius:12px;overflow:hidden;background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all 0.3s;}
+  .gallery-item:hover{border-color:var(--accent);transform:scale(1.02);}
+  .gallery-ph{width:100%;display:flex;align-items:center;justify-content:center;color:var(--border);font-size:0.75rem;background:var(--card2);}
+
+  /* OWNER PANEL */
+  .owner-fab{position:fixed;bottom:2rem;right:2rem;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg2);border:none;padding:0.75rem 1.4rem;border-radius:30px;font-weight:700;font-size:0.85rem;cursor:pointer;z-index:900;box-shadow:0 6px 24px rgba(226,201,126,0.4);transition:all 0.3s;font-family:'DM Sans',sans-serif;}
+  .owner-fab:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(226,201,126,0.5);}
+  .owner-banner{display:none;position:fixed;top:70px;left:0;right:0;z-index:800;background:linear-gradient(90deg,rgba(226,201,126,0.12),rgba(168,213,162,0.08));border-bottom:1px solid var(--gold);padding:0.6rem 2rem;align-items:center;justify-content:space-between;}
+  .owner-banner.active{display:flex;}
+  .owner-banner span{color:var(--gold);font-weight:600;font-size:0.85rem;}
+  .owner-banner button{background:transparent;border:1px solid var(--red);color:var(--red);padding:0.3rem 0.8rem;border-radius:8px;cursor:pointer;font-size:0.78rem;font-family:'DM Sans',sans-serif;}
+  /* MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;align-items:center;justify-content:center;padding:1rem;}
+  .modal-overlay.active{display:flex;}
+  .modal{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:modalIn 0.3s ease;}
+  @keyframes modalIn{from{opacity:0;transform:scale(0.92);}to{opacity:1;transform:scale(1);}}
+  .modal h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:1.5rem;color:var(--gold);}
+  .modal-close{float:right;background:none;border:none;color:var(--text2);font-size:1.5rem;cursor:pointer;margin-top:-0.3rem;}
+  .modal input,.modal select,.modal textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:0.7rem 1rem;color:var(--text);font-size:0.9rem;font-family:'DM Sans',sans-serif;margin-bottom:0.8rem;outline:none;transition:border 0.2s;}
+  .modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--accent);}
+  .modal select option{background:var(--bg);}
+  .modal label{display:block;color:var(--text2);font-size:0.8rem;margin-bottom:0.3rem;}
+  .modal-submit{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg2);border:none;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.95rem;cursor:pointer;margin-top:0.5rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+  .modal-submit:hover{opacity:0.9;transform:translateY(-1px);}
+  .pw-modal{max-width:360px;}
+  .pw-modal input{text-align:center;letter-spacing:4px;}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:6rem;right:2rem;background:var(--accent);color:var(--bg2);padding:0.8rem 1.4rem;border-radius:10px;font-weight:600;font-size:0.85rem;z-index:9999;transform:translateY(20px);opacity:0;transition:all 0.3s;pointer-events:none;}
+  .toast.show{transform:translateY(0);opacity:1;}
+
+  /* FOOTER */
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem 2rem;}
+  .footer-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;}
+  .footer-brand .logo{display:block;margin-bottom:0.8rem;font-size:1.3rem;}
+  .footer-brand p{color:var(--text2);font-size:0.83rem;line-height:1.6;}
+  .footer-col h4{color:var(--gold);font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem;}
+  .footer-col ul{list-style:none;}
+  .footer-col ul li{margin-bottom:0.5rem;}
+  .footer-col ul li a{color:var(--text2);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
+  .footer-col ul li a:hover{color:var(--accent);}
+  .footer-bottom{max-width:1200px;margin:2rem auto 0;border-top:1px solid var(--border);padding-top:1.5rem;text-align:center;color:var(--text2);font-size:0.8rem;}
+  .insta-link{color:var(--accent);text-decoration:none;font-weight:600;}
+  .insta-link:hover{color:var(--gold);}
+
+  /* RESPONSIVE */
+  @media(max-width:768px){
+    .nav-links{display:none;}
+    .products-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.8rem;}
+    .hero-stats{gap:1.5rem;}
+    .about-grid{grid-template-columns:1fr;}
+    .gallery-grid{columns:2 150px;}
+  }
+  @media(max-width:480px){
+    .products-grid{grid-template-columns:repeat(2,1fr);}
+  }
+
+  /* LOADING OVERLAY */
+  .loading-overlay{position:fixed;inset:0;background:var(--bg2);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.6s;}
+  .loading-overlay.hidden{opacity:0;pointer-events:none;}
+  .loading-logo{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--gold);animation:pulse 1.2s ease-in-out infinite;}
+  .loading-bar-wrap{width:200px;height:3px;background:var(--border);border-radius:2px;margin-top:1.5rem;overflow:hidden;}
+  .loading-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:2px;animation:loadBar 1.5s ease forwards;}
+  @keyframes loadBar{from{width:0;}to{width:100%;}}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-logo">Hevarvet Shop</div>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#" onclick="showPage('home')">Hevarvet <span>Shop</span></a>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+      <li><a href="#" onclick="showPage('shop')" id="nav-shop">Shop</a></li>
+      <li><a href="#" onclick="showPage('categories')" id="nav-categories">Categories</a></li>
+      <li><a href="#" onclick="showPage('services')" id="nav-services">Services</a></li>
+      <li><a href="#" onclick="showPage('gallery')" id="nav-gallery">Gallery</a></li>
+      <li><a href="#" onclick="showPage('blog')" id="nav-blog">Blog</a></li>
+      <li><a href="#" onclick="showPage('faq')" id="nav-faq">FAQ</a></li>
+      <li><a href="#" onclick="showPage('wishlist')" id="nav-wishlist">Wishlist</a></li>
+      <li><a href="#" onclick="showPage('about')" id="nav-about">About</a></li>
+      <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+    </ul>
+    <button class="nav-cart" onclick="showPage('wishlist')">Wishlist</button>
+  </div>
+</nav>
+
+<!-- OWNER BANNER -->
+<div class="owner-banner" id="ownerBanner">
+  <span>Owner Mode Active - You can add and delete products</span>
+  <button onclick="ownerLogout()">Logout</button>
+</div>
+
+<!-- ===== PAGE: HOME ===== -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg-circles">
+      <div class="circle c1"></div>
+      <div class="circle c2"></div>
+      <div class="circle c3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-tag">Premium Pet Store</div>
+      <h1 class="hero-title">Everything For<span class="line2">Your Pet's Joy</span></h1>
+      <p class="hero-sub">Hevarvet Shop brings you the finest pet products, accessories, and care items for every beloved companion.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('shop')">Shop Now</button>
+        <button class="btn-outline" onclick="showPage('categories')">Browse Categories</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">300+</div><div class="stat-label">Products</div></div>
+        <div class="stat"><div class="stat-num">7</div><div class="stat-label">Categories</div></div>
+        <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Quality</div></div>
+        <div class="stat"><div class="stat-num">Fast</div><div class="stat-label">Delivery</div></div>
+      </div>
+    </div>
+  </div>
+  <!-- Featured categories strip on home -->
+  <div class="section-header">
+    <div class="section-tag">Browse by Pet</div>
+    <h2 class="section-title">Shop by Category</h2>
+    <p class="section-sub">Find exactly what your furry, feathered, or finned friend needs.</p>
+  </div>
+  <div class="cats-grid" style="padding-bottom:5rem;">
+    <div class="cat-card" onclick="filterAndGo('Discount')">
+      <div class="cat-icon" style="background:rgba(224,108,117,0.1);border:1px solid rgba(224,108,117,0.25);">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e06c75" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><line x1="8" y1="16" x2="16" y2="8"/><circle cx="8.5" cy="8.5" r="1.2" fill="#e06c75"/><circle cx="15.5" cy="15.5" r="1.2" fill="#e06c75"/></svg>
+      </div>
+      <div class="cat-name">Discount</div>
+      <div class="cat-count">Deals, Bundles, Sale Items</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Cat')">
+      <div class="cat-icon" style="background:rgba(168,213,162,0.15);border:1px solid rgba(168,213,162,0.3);">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#a8d5a2" stroke-width="1.8"><path d="M12 3C9 3 6 6 6 9v2l-2 3h16l-2-3V9C18 6 15 3 12 3z"/><path d="M9 15v3a3 3 0 006 0v-3"/><path d="M6 3l-2 4M18 3l2 4"/></svg>
+      </div>
+      <div class="cat-name">Cat</div>
+      <div class="cat-count">Food, Litter, Toys</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Dog')">
+      <div class="cat-icon" style="background:rgba(226,201,126,0.15);border:1px solid rgba(226,201,126,0.3);">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e2c97e" stroke-width="1.8"><path d="M10 5.5C10 4.12 11.12 3 12.5 3S15 4.12 15 5.5V7h2l1 2-1 1v4l-2 2H9l-2-2V10L6 9l1-2h3V5.5z"/><circle cx="9.5" cy="10.5" r="0.5" fill="#e2c97e"/><circle cx="14.5" cy="10.5" r="0.5" fill="#e2c97e"/></svg>
+      </div>
+      <div class="cat-name">Dog</div>
+      <div class="cat-count">Food, Toys, Accessories</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Birds')">
+      <div class="cat-icon" style="background:rgba(127,191,123,0.15);border:1px solid rgba(127,191,123,0.3);">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7fbf7b" stroke-width="1.8"><path d="M3 8c0 0 4-4 8-4s10 4 10 4l-6 6H9L3 8z"/><path d="M9 14l-3 6M15 14l3 6M12 14v6"/></svg>
+      </div>
+      <div class="cat-name">Birds</div>
+      <div class="cat-count">Cages, Seeds, Toys</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Hotel')">
+      <div class="cat-icon" style="background:rgba(100,180,220,0.1);border:1px solid rgba(100,180,220,0.25);">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7eccc0" stroke-width="1.8"><path d="M3 18v-7a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M13 13h6a2 2 0 012 2v3"/><path d="M3 21v-3M21 21v-3"/><path d="M3 15h18"/></svg>
+      </div>
+      <div class="cat-name">Hotel</div>
+      <div class="cat-count">Boarding, Daycare, Stay</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Grooming')">
+      <div class="cat-icon" style="background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><path d="M9 3l3 5h5l-4 4 1.5 5L12 14l-2.5 3L11 12 7 8h5L9 3z"/></svg>
+      </div>
+      <div class="cat-name">Grooming</div>
+      <div class="cat-count">Shampoos, Brushes, Care</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Other Animal Supplies')">
+      <div class="cat-icon" style="background:rgba(226,201,126,0.1);border:1px solid rgba(226,201,126,0.2);">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4a74a" stroke-width="1.8"><circle cx="7" cy="8" r="1.5"/><circle cx="11" cy="5.5" r="1.5"/><circle cx="15" cy="5.5" r="1.5"/><circle cx="18" cy="8" r="1.5"/><path d="M6 15c0-3 3-4 6-4s6 1 6 4-3 5-6 5-6-2-6-5z"/></svg>
+      </div>
+      <div class="cat-name">Other Animal Supplies</div>
+      <div class="cat-count">Small Pets, Fish, Reptiles</div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo">Hevarvet <span>Shop</span></span>
+        <p>Your trusted pet supply store. Quality products for every beloved companion.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('shop')">Shop</a></li>
+          <li><a href="#" onclick="showPage('categories')">Categories</a></li>
+          <li><a href="#" onclick="showPage('services')">Services</a></li>
+          <li><a href="#" onclick="showPage('about')">About</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('faq')">FAQ</a></li>
+          <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Returns</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <ul>
+          <li><a href="https://www.instagram.com/hevarvet_shop" target="_blank" class="insta-link">Instagram @hevarvet_shop</a></li>
+          <li><a href="https://www.tiktok.com/@hevarvet_shop" target="_blank" class="insta-link">TikTok @hevarvet_shop</a></li>
+          <li><a href="https://www.snapchat.com/add/hevarvet_shop" target="_blank" class="insta-link">Snapchat @hevarvet_shop</a></li>
+          <li><a href="https://www.facebook.com/hevarvet_shop" target="_blank" class="insta-link">Facebook @hevarvet_shop</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul>
+          <li>Erbil, Havalan, 1st 20M Road</li>
+          <li><a href="tel:07503512551" class="insta-link">0750 351 2551</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2024 Hevarvet Shop. All rights reserved. | Follow us on
+      <a href="https://www.instagram.com/hevarvet_shop" target="_blank" class="insta-link">@hevarvet_shop</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ===== PAGE: SHOP ===== -->
+<div class="page" id="page-shop">
+  <div class="section-header">
+    <div class="section-tag">All Products</div>
+    <h2 class="section-title">Our Shop</h2>
+    <p class="section-sub">Browse our full collection of premium pet supplies.</p>
+  </div>
+  <div class="shop-controls">
+    <input class="search-box" type="text" placeholder="Search products..." id="searchInput" oninput="renderProducts()"/>
+    <div class="filter-btns" id="filterBtns">
+      <button class="filter-btn active" data-cat="All" onclick="setFilter(this)">All</button>
+      <button class="filter-btn" data-cat="Discount" onclick="setFilter(this)">Discount</button>
+      <button class="filter-btn" data-cat="Cat" onclick="setFilter(this)">Cat</button>
+      <button class="filter-btn" data-cat="Dog" onclick="setFilter(this)">Dog</button>
+      <button class="filter-btn" data-cat="Birds" onclick="setFilter(this)">Birds</button>
+      <button class="filter-btn" data-cat="Hotel" onclick="setFilter(this)">Hotel</button>
+      <button class="filter-btn" data-cat="Grooming" onclick="setFilter(this)">Grooming</button>
+      <button class="filter-btn" data-cat="Other Animal Supplies" onclick="setFilter(this)">Other Animal Supplies</button>
+    </div>
+  </div>
+  <div class="products-count" id="productsCount"></div>
+  <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<!-- ===== PAGE: CATEGORIES ===== -->
+<div class="page" id="page-categories">
+  <div class="section-header">
+    <div class="section-tag">Browse</div>
+    <h2 class="section-title">All Categories</h2>
+    <p class="section-sub">Choose a category to find the perfect products for your pet.</p>
+  </div>
+  <div class="cats-grid">
+    <div class="cat-card" onclick="filterAndGo('Discount')">
+      <div class="cat-icon" style="background:rgba(224,108,117,0.1);border:1px solid rgba(224,108,117,0.25);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e06c75" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><line x1="8" y1="16" x2="16" y2="8"/><circle cx="8.5" cy="8.5" r="1.2" fill="#e06c75"/><circle cx="15.5" cy="15.5" r="1.2" fill="#e06c75"/></svg>
+      </div>
+      <div class="cat-name">Discount</div>
+      <div class="cat-count">Special offers, bundles and clearance deals</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Cat')">
+      <div class="cat-icon" style="background:rgba(168,213,162,0.15);border:1px solid rgba(168,213,162,0.3);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#a8d5a2" stroke-width="1.8"><path d="M12 3C9 3 6 6 6 9v2l-2 3h16l-2-3V9C18 6 15 3 12 3z"/><path d="M9 15v3a3 3 0 006 0v-3"/></svg>
+      </div>
+      <div class="cat-name">Cat</div>
+      <div class="cat-count">Food, litter, scratchers, beds and toys</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Dog')">
+      <div class="cat-icon" style="background:rgba(226,201,126,0.15);border:1px solid rgba(226,201,126,0.3);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e2c97e" stroke-width="1.8"><path d="M10 5.5C10 4.12 11.12 3 12.5 3S15 4.12 15 5.5V7h2l1 2-1 1v4l-2 2H9l-2-2V10L6 9l1-2h3V5.5z"/></svg>
+      </div>
+      <div class="cat-name">Dog</div>
+      <div class="cat-count">Food, toys, leashes, beds, grooming and more</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Birds')">
+      <div class="cat-icon" style="background:rgba(127,191,123,0.15);border:1px solid rgba(127,191,123,0.3);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7fbf7b" stroke-width="1.8"><path d="M3 8c0 0 4-4 8-4s10 4 10 4l-6 6H9L3 8z"/><path d="M9 14l-3 6M15 14l3 6"/></svg>
+      </div>
+      <div class="cat-name">Birds</div>
+      <div class="cat-count">Cages, seeds, perches, baths, supplements</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Hotel')">
+      <div class="cat-icon" style="background:rgba(100,180,220,0.1);border:1px solid rgba(100,180,220,0.25);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7eccc0" stroke-width="1.8"><path d="M3 18v-7a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M13 13h6a2 2 0 012 2v3"/><path d="M3 21v-3M21 21v-3"/><path d="M3 15h18"/></svg>
+      </div>
+      <div class="cat-name">Hotel</div>
+      <div class="cat-count">Pet boarding, daycare and overnight stays</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Grooming')">
+      <div class="cat-icon" style="background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><path d="M9 3l3 5h5l-4 4 1.5 5L12 14l-2.5 3L11 12 7 8h5L9 3z"/></svg>
+      </div>
+      <div class="cat-name">Grooming</div>
+      <div class="cat-count">Shampoos, brushes, clippers, dental care</div>
+    </div>
+    <div class="cat-card" onclick="filterAndGo('Other Animal Supplies')">
+      <div class="cat-icon" style="background:rgba(226,201,126,0.1);border:1px solid rgba(226,201,126,0.2);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d4a74a" stroke-width="1.8"><circle cx="7" cy="8" r="1.5"/><circle cx="11" cy="5.5" r="1.5"/><circle cx="15" cy="5.5" r="1.5"/><circle cx="18" cy="8" r="1.5"/><path d="M6 15c0-3 3-4 6-4s6 1 6 4-3 5-6 5-6-2-6-5z"/></svg>
+      </div>
+      <div class="cat-name">Other Animal Supplies</div>
+      <div class="cat-count">Supplies for fish, reptiles, hamsters, rabbits and more</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: SERVICES ===== -->
+<div class="page" id="page-services">
+  <div class="section-header">
+    <div class="section-tag">What We Offer</div>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">Beyond products, we provide expert care and services for your pets.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#a8d5a2" stroke-width="1.8"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M12 7V4M8 7V5M16 7V5"/></svg></div>
+      <div class="service-name">Pet Grooming</div>
+      <div class="service-desc">Professional grooming sessions for dogs and cats. Full bath, cut, nail trim, and styling by our expert groomers.</div>
+      <div class="service-price">From $25</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e2c97e" stroke-width="1.8"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div>
+      <div class="service-name">Home Delivery</div>
+      <div class="service-desc">Fast and secure delivery of all products directly to your door. Order on Instagram and we deliver same-day or next-day.</div>
+      <div class="service-price">Free over $50</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7eccc0" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+      <div class="service-name">Subscription Box</div>
+      <div class="service-desc">Monthly curated pet supply boxes tailored to your pet's breed, size and preferences. Never run out of essentials.</div>
+      <div class="service-price">From $40/month</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e06c75" stroke-width="1.8"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
+      <div class="service-name">Pet Nutrition Advice</div>
+      <div class="service-desc">Get personalized diet and nutrition guidance for your specific pet. We help you choose the right food for a healthy life.</div>
+      <div class="service-price">Free Consultation</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#a8d5a2" stroke-width="1.8"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.127-.16-2.217-.45-3.246z"/></svg></div>
+      <div class="service-name">Product Warranty</div>
+      <div class="service-desc">All products come with our satisfaction guarantee. Not happy? We offer easy returns and replacements within 30 days.</div>
+      <div class="service-price">30-Day Guarantee</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e2c97e" stroke-width="1.8"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+      <div class="service-name">Loyalty Program</div>
+      <div class="service-desc">Earn points on every purchase and redeem for discounts. Follow @hevarvet_shop on Instagram for exclusive member deals.</div>
+      <div class="service-price">Join for Free</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: GALLERY ===== -->
+<div class="page" id="page-gallery">
+  <div class="section-header">
+    <div class="section-tag">Our Community</div>
+    <h2 class="section-title">Happy Pets Gallery</h2>
+    <p class="section-sub">See the happy animals who enjoy Hevarvet Shop products. Share yours on Instagram!</p>
+  </div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</div>
+
+<!-- ===== PAGE: BLOG ===== -->
+<div class="page" id="page-blog">
+  <div class="section-header">
+    <div class="section-tag">Tips & Advice</div>
+    <h2 class="section-title">Pet Care Blog</h2>
+    <p class="section-sub">Expert advice, tips and guides to help you give your pets the best life possible.</p>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card">
+      <div class="blog-img" style="height:160px;background:linear-gradient(135deg,#1e332a,#3a5c4e);display:flex;align-items:center;justify-content:center;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#a8d5a2" stroke-width="1.5" opacity="0.4"><path d="M10 5.5C10 4.12 11.12 3 12.5 3S15 4.12 15 5.5V7h2l1 2-1 1v4l-2 2H9l-2-2V10L6 9l1-2h3V5.5z"/></svg>
+      </div>
+      <div class="blog-body">
+        <div class="blog-tag">Dogs</div>
+        <div class="blog-title">10 Best Dog Foods for 2024</div>
+        <div class="blog-excerpt">A complete guide to the top-rated dog foods that provide balanced nutrition for all breeds and sizes.</div>
+        <div class="blog-meta">June 2024</div>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img" style="height:160px;background:linear-gradient(135deg,#243d30,#3a5c4e);display:flex;align-items:center;justify-content:center;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#e2c97e" stroke-width="1.5" opacity="0.4"><path d="M12 3C9 3 6 6 6 9v2l-2 3h16l-2-3V9C18 6 15 3 12 3z"/></svg>
+      </div>
+      <div class="blog-body">
+        <div class="blog-tag">Cats</div>
+        <div class="blog-title">How to Set Up a Perfect Cat Room</div>
+        <div class="blog-excerpt">Create a cozy, stimulating environment your cat will love with these simple interior tips and product recommendations.</div>
+        <div class="blog-meta">May 2024</div>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img" style="height:160px;background:linear-gradient(135deg,#1e332a,#2d4a3e);display:flex;align-items:center;justify-content:center;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#7eccc0" stroke-width="1.5" opacity="0.4"><path d="M2 12c2-6 8-8 12-8 0 4-2 8-6 10-2 1-4 2-6-2zm12-8c2 0 6 4 8 8-2 4-6 2-8 0"/></svg>
+      </div>
+      <div class="blog-body">
+        <div class="blog-tag">Fish</div>
+        <div class="blog-title">Beginner's Guide to Fishkeeping</div>
+        <div class="blog-excerpt">Start your aquarium journey right with this complete beginner's guide covering tanks, filters, and fish selection.</div>
+        <div class="blog-meta">April 2024</div>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img" style="height:160px;background:linear-gradient(135deg,#3a5c4e,#1e332a);display:flex;align-items:center;justify-content:center;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#e06c75" stroke-width="1.5" opacity="0.4"><path d="M9 3l3 5h5l-4 4 1.5 5L12 14l-2.5 3L11 12 7 8h5L9 3z"/></svg>
+      </div>
+      <div class="blog-body">
+        <div class="blog-tag">Grooming</div>
+        <div class="blog-title">Grooming Your Pet at Home</div>
+        <div class="blog-excerpt">Save money and bond with your pet by learning proper grooming techniques with the right tools from Hevarvet Shop.</div>
+        <div class="blog-meta">March 2024</div>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img" style="height:160px;background:linear-gradient(135deg,#243d30,#1e332a);display:flex;align-items:center;justify-content:center;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#7fbf7b" stroke-width="1.5" opacity="0.4"><path d="M3 8c0 0 4-4 8-4s10 4 10 4l-6 6H9L3 8z"/></svg>
+      </div>
+      <div class="blog-body">
+        <div class="blog-tag">Birds</div>
+        <div class="blog-title">Choosing the Right Bird Cage</div>
+        <div class="blog-excerpt">Size, bar spacing, material, and placement - everything you need to know before buying a cage for your feathered friend.</div>
+        <div class="blog-meta">February 2024</div>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img" style="height:160px;background:linear-gradient(135deg,#3a5c4e,#243d30);display:flex;align-items:center;justify-content:center;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d4a74a" stroke-width="1.5" opacity="0.4"><ellipse cx="12" cy="14" rx="6" ry="5"/><path d="M8 9C7 6 5 5 5 5M16 9C17 6 19 5 19 5"/></svg>
+      </div>
+      <div class="blog-body">
+        <div class="blog-tag">Small Animals</div>
+        <div class="blog-title">Caring for Your Hamster</div>
+        <div class="blog-excerpt">Everything you need to know about housing, feeding, and enriching the life of your small furry companion.</div>
+        <div class="blog-meta">January 2024</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: FAQ ===== -->
+<div class="page" id="page-faq">
+  <div class="section-header">
+    <div class="section-tag">Help</div>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-sub">Everything you need to know about Hevarvet Shop.</p>
+  </div>
+  <div class="faq-wrap">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I place an order?<span class="faq-arrow">&#8964;</span></div>
+      <div class="faq-a"><p>Click the price button on any product and you will be directed to our Instagram page @hevarvet_shop. Send us a direct message with the product name and we will process your order immediately.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Do you deliver to my area?<span class="faq-arrow">&#8964;</span></div>
+      <div class="faq-a"><p>We currently deliver across the region. Contact us on Instagram @hevarvet_shop to confirm delivery to your specific location. We are always expanding our delivery zones.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What payment methods do you accept?<span class="faq-arrow">&#8964;</span></div>
+      <div class="faq-a"><p>We accept cash on delivery, bank transfer, and various digital payment methods. Full details are provided when you message us on Instagram to place your order.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I return a product?<span class="faq-arrow">&#8964;</span></div>
+      <div class="faq-a"><p>Yes! We offer a 30-day satisfaction guarantee. If you are not happy with any product, contact us on Instagram and we will arrange a return or replacement. Products must be unused and in original packaging.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How long does delivery take?<span class="faq-arrow">&#8964;</span></div>
+      <div class="faq-a"><p>Standard delivery takes 1-3 business days. Same-day delivery is available in select areas for orders placed before 12pm. Express delivery options are also available - ask us on Instagram.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Are your products authentic and safe?<span class="faq-arrow">&#8964;</span></div>
+      <div class="faq-a"><p>Absolutely. All products at Hevarvet Shop are sourced from reputable brands and suppliers. We only carry pet-safe, tested products that meet quality standards. Your pet's safety is our top priority.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Do you offer bulk or wholesale pricing?<span class="faq-arrow">&#8964;</span></div>
+      <div class="faq-a"><p>Yes, we do offer special pricing for bulk orders and wholesale purchases. Please reach out to us directly on Instagram @hevarvet_shop or via the Contact page with your requirements.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I follow your new products?<span class="faq-arrow">&#8964;</span></div>
+      <div class="faq-a"><p>Follow us on Instagram @hevarvet_shop to stay updated on new arrivals, promotions, and exclusive deals. We post new products regularly and run special Instagram-only offers for our followers.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: WISHLIST ===== -->
+<div class="page" id="page-wishlist">
+  <div class="section-header">
+    <div class="section-tag">Saved Items</div>
+    <h2 class="section-title">Your Wishlist</h2>
+    <p class="section-sub">Products you have saved to order later.</p>
+  </div>
+  <div class="wishlist-wrap">
+    <div id="wishlistContent"></div>
+  </div>
+</div>
+
+<!-- ===== PAGE: ABOUT ===== -->
+<div class="page" id="page-about">
+  <div class="section-header">
+    <div class="section-tag">Our Story</div>
+    <h2 class="section-title">About Hevarvet Shop</h2>
+    <p class="section-sub">Built by pet lovers, for pet lovers.</p>
+  </div>
+  <div class="about-wrap">
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>Our Mission</h3>
+        <p>At Hevarvet Shop, we believe every pet deserves the best. Our mission is to make premium pet products accessible, affordable, and easy to find — all in one trusted place.</p>
+        <div class="about-values" style="margin-top:1rem;">
+          <div class="value-item"><div class="value-dot"></div>Quality-first sourcing</div>
+          <div class="value-item"><div class="value-dot"></div>Pet safety certified</div>
+          <div class="value-item"><div class="value-dot"></div>Customer happiness</div>
+          <div class="value-item"><div class="value-dot"></div>Fast, reliable delivery</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <h3>Our Story</h3>
+        <p>Hevarvet Shop started as a small passion project by dedicated pet owners who struggled to find quality supplies locally. Today, we offer over 300 carefully selected products across 7 categories, serving hundreds of happy pet families.</p>
+      </div>
+      <div class="about-card">
+        <h3>Why Choose Us</h3>
+        <p>We are not just a store — we are a community. Every product is tested, every customer is valued, and every pet matters. Shop with confidence knowing our team is always here to help via Instagram @hevarvet_shop.</p>
+      </div>
+      <div class="about-card">
+        <h3>Our Commitment</h3>
+        <p>We are committed to ethical sourcing, pet-safe products, and reducing our environmental footprint. We partner with brands that share our values of animal welfare and sustainability.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem;">
+      <a href="https://www.instagram.com/hevarvet_shop" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#a8d5a2,#7fbf7b);color:#1e332a;padding:0.9rem 2.5rem;border-radius:30px;font-weight:700;text-decoration:none;transition:all 0.3s;">Follow on Instagram</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: CONTACT ===== -->
+<div class="page" id="page-contact">
+  <div class="section-header">
+    <div class="section-tag">Get In Touch</div>
+    <h2 class="section-title">Contact Us</h2>
+    <p class="section-sub">We would love to hear from you. Reach out anytime!</p>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-form">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Enter your name"/>
+      </div>
+      <div class="form-group">
+        <label>Email or Phone</label>
+        <input type="text" placeholder="Your contact details"/>
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <select>
+          <option>Product Inquiry</option>
+          <option>Order Issue</option>
+          <option>Return Request</option>
+          <option>Wholesale Inquiry</option>
+          <option>General Question</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea rows="5" placeholder="Write your message here..."></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitContact()">Send Message</button>
+    </div>
+    <div class="contact-info">
+      <div class="info-card">
+        <div class="label">Location</div>
+        <div class="val">Erbil, Havalan, 1st 20M Road</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Phone</div>
+        <div class="val"><a href="tel:07503512551" class="insta-link">0750 351 2551</a></div>
+      </div>
+      <div class="info-card">
+        <div class="label">Instagram</div>
+        <div class="val"><a href="https://www.instagram.com/hevarvet_shop" target="_blank" class="insta-link">@hevarvet_shop</a></div>
+      </div>
+      <div class="info-card">
+        <div class="label">TikTok</div>
+        <div class="val"><a href="https://www.tiktok.com/@hevarvet_shop" target="_blank" class="insta-link">@hevarvet_shop</a></div>
+      </div>
+      <div class="info-card">
+        <div class="label">Snapchat</div>
+        <div class="val"><a href="https://www.snapchat.com/add/hevarvet_shop" target="_blank" class="insta-link">@hevarvet_shop</a></div>
+      </div>
+      <div class="info-card">
+        <div class="label">Facebook</div>
+        <div class="val"><a href="https://www.facebook.com/hevarvet_shop" target="_blank" class="insta-link">@hevarvet_shop</a></div>
+      </div>
+      <div class="info-card">
+        <div class="label">Response Time</div>
+        <div class="val">Within 24 hours</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Delivery</div>
+        <div class="val">1-3 Business Days</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Returns</div>
+        <div class="val">30-Day Policy</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OWNER PANEL MODAL -->
+<div class="modal-overlay" id="ownerModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('ownerModal')">&times;</button>
+    <h2>Add New Product</h2>
+    <label>Product Name</label>
+    <input type="text" id="inp-name" placeholder="e.g. Premium Dog Collar"/>
+    <label>Category</label>
+    <select id="inp-cat">
+      <option>Discount</option>
+      <option>Cat</option>
+      <option>Dog</option>
+      <option>Birds</option>
+      <option>Hotel</option>
+      <option>Grooming</option>
+      <option>Other Animal Supplies</option>
+    </select>
+    <label>Price (e.g. $24.99)</label>
+    <input type="text" id="inp-price" placeholder="$24.99"/>
+    <label>Photo URL (paste image link or leave blank)</label>
+    <input type="text" id="inp-img" placeholder="https://..."/>
+    <label>Short Description</label>
+    <textarea id="inp-desc" rows="3" placeholder="Describe the product briefly..."></textarea>
+    <label>Badge (optional)</label>
+    <select id="inp-badge">
+      <option value="">None</option>
+      <option value="new">New</option>
+      <option value="sale">Sale</option>
+      <option value="hot">Hot</option>
+      <option value="best">Best Seller</option>
+    </select>
+    <button class="modal-submit" onclick="addProduct()">Add Product</button>
+  </div>
+</div>
+
+<!-- PASSWORD MODAL -->
+<div class="modal-overlay" id="pwModal">
+  <div class="modal pw-modal">
+    <button class="modal-close" onclick="closeModal('pwModal')">&times;</button>
+    <h2>Owner Access</h2>
+    <label>Enter owner password</label>
+    <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')checkPw()"/>
+    <button class="modal-submit" onclick="checkPw()" style="margin-top:0.5rem;">Unlock</button>
+  </div>
+</div>
+
+<!-- OWNER FAB -->
+<button class="owner-fab" id="ownerFab" onclick="ownerAction()">+ Owner Panel</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  CONFIG
+// ============================================================
+const OWNER_PASSWORD = 'hevarvet2024';
+const INSTAGRAM_URL  = 'https://www.instagram.com/hevarvet_shop';
+const TIKTOK_URL     = 'https://www.tiktok.com/@hevarvet_shop';
+const SNAPCHAT_URL   = 'https://www.snapchat.com/add/hevarvet_shop';
+const FACEBOOK_URL   = 'https://www.facebook.com/hevarvet_shop';
+const PHONE_NUMBER   = '0750 351 2551';
+const SHOP_LOCATION  = 'Erbil, Havalan, 1st 20M Road';
+const SLOT_COUNT     = 300;  // <-- 300 blank slots
+
+// ============================================================
+//  STATE
+// ============================================================
+let isOwner      = false;
+let products     = [];
+let activeFilter = 'All';
+let wishlist     = [];
+
+// ============================================================
+//  STORAGE
+// ============================================================
+function saveProducts(){localStorage.setItem('hv_products',JSON.stringify(products));}
+function loadProducts(){
+  const s=localStorage.getItem('hv_products');
+  products=s?JSON.parse(s):[];
+}
+function saveWishlist(){localStorage.setItem('hv_wishlist',JSON.stringify(wishlist));}
+function loadWishlist(){
+  const s=localStorage.getItem('hv_wishlist');
+  wishlist=s?JSON.parse(s):[];
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+window.addEventListener('load',()=>{
+  loadProducts();
+  loadWishlist();
+  renderProducts();
+  buildGallery();
+  renderWishlist();
+  setTimeout(()=>{
+    document.getElementById('loadingOverlay').classList.add('hidden');
+  },1800);
+});
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  const nl=document.getElementById('nav-'+id);
+  if(nl)nl.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='shop')renderProducts();
+  if(id==='wishlist')renderWishlist();
+}
+
+function filterAndGo(cat){
+  activeFilter=cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.cat===cat||b.dataset.cat==='All'&&cat==='All');
+  });
+  document.querySelectorAll('.filter-btn').forEach(b=>{
+    b.classList.remove('active');
+    if(b.dataset.cat===cat)b.classList.add('active');
+  });
+  showPage('shop');
+}
+
+function setFilter(btn){
+  activeFilter=btn.dataset.cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+// ============================================================
+//  RENDER PRODUCTS (300 SLOTS)
+// ============================================================
+function renderProducts(){
+  const grid   = document.getElementById('productsGrid');
+  const countEl= document.getElementById('productsCount');
+  const search = (document.getElementById('searchInput')?.value||'').toLowerCase().trim();
+
+  // Filter real products
+  const realFiltered = products.filter(p=>{
+    const matchCat  = activeFilter==='All'||p.category===activeFilter;
+    const matchSrch = !search||(p.name.toLowerCase().includes(search)||(p.desc||'').toLowerCase().includes(search));
+    return matchCat&&matchSrch;
+  });
+
+  // Build cards HTML
+  let html='';
+
+  // Real products first
+  realFiltered.forEach((p,i)=>{
+    const delay=Math.min(i*20,400);
+    html+=productCardHTML(p,i,delay,true);
+  });
+
+  // Empty slots — always show 300 total empty when no search
+  if(!search){
+    const emptyNeeded=SLOT_COUNT-realFiltered.length;
+    for(let i=0;i<emptyNeeded;i++){
+      const slotNum=realFiltered.length+i+1;
+      const delay=Math.min((realFiltered.length+i)*8,600);
+      html+=emptySlotHTML(slotNum,delay);
+    }
+  }
+
+  grid.innerHTML=html;
+
+  const realCount=realFiltered.length;
+  const emptyShown=search?0:Math.max(0,SLOT_COUNT-realCount);
+  if(search){
+    countEl.textContent=realCount+' product'+(realCount!==1?'s':'')+' found';
+  } else {
+    countEl.textContent=realCount+' product'+(realCount!==1?'s':'')+' added out of '+SLOT_COUNT+' slots';
+  }
+}
+
+function productCardHTML(p,i,delay,real){
+  const badgeHTML=p.badge?`<div class="product-badge ${p.badge}">${p.badge==='new'?'New':p.badge==='sale'?'Sale':p.badge==='hot'?'Hot':'Best'}</div>`:'';
+  const imgHTML=p.img
+    ?`<img class="product-img" src="${p.img}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'product-img-placeholder\\'><div class=\\'placeholder-icon\\'><svg width=\\'24\\' height=\\'24\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><circle cx=\\'12\\' cy=\\'12\\' r=\\'10\\'/><path d=\\'M8 12h8M12 8v8\\'/></svg></div><span>No Image</span></div>'"/>`
+    :`<div class="product-img-placeholder"><div class="placeholder-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></div><span>Product Photo</span></div>`;
+  return`<div class="product-card ${isOwner?'owner-active':''}" style="animation-delay:${delay}ms">
+    <div class="product-img-wrap">${badgeHTML}${imgHTML}</div>
+    <div class="product-body">
+      <div class="product-name">${escHTML(p.name)}</div>
+      <div class="product-desc">${escHTML(p.desc||'')}</div>
+      <div class="product-footer">
+        <button class="price-btn" onclick="orderOnInsta(event,'${escHTML(p.name)}','${escHTML(p.price)}')">${escHTML(p.price)}</button>
+        <button onclick="toggleWish('${p.id}')" style="background:none;border:none;cursor:pointer;color:${wishlist.includes(p.id)?'#e06c75':'#3f5e50'};font-size:1.2rem;" title="Wishlist">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="${wishlist.includes(p.id)?'#e06c75':'none'}" stroke="${wishlist.includes(p.id)?'#e06c75':'#3f5e50'}" stroke-width="2"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="delete-btn" onclick="deleteProduct('${p.id}')" title="Delete">&times;</button>
+  </div>`;
+}
+
+function emptySlotHTML(num,delay){
+  return`<div class="product-card" style="animation-delay:${delay}ms;opacity:0.45;">
+    <div class="product-img-wrap">
+      <div class="product-img-placeholder">
+        <div class="placeholder-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
+        </div>
+        <span>Slot ${num}</span>
+      </div>
+    </div>
+    <div class="product-body">
+      <div class="product-name empty">Available Slot</div>
+      <div class="product-desc" style="color:var(--border);font-size:0.72rem;">Owner can add product here</div>
+      <div class="product-footer">
+        <button class="price-btn empty-btn">Coming Soon</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+//  INSTAGRAM ORDER
+// ============================================================
+function orderOnInsta(e,name,price){
+  e.stopPropagation();
+  window.open(INSTAGRAM_URL,'_blank');
+}
+
+// ============================================================
+//  WISHLIST
+// ============================================================
+function toggleWish(id){
+  if(wishlist.includes(id)){wishlist=wishlist.filter(x=>x!==id);showToast('Removed from wishlist');}
+  else{wishlist.push(id);showToast('Added to wishlist!');}
+  saveWishlist();
+  renderProducts();
+  renderWishlist();
+}
+
+function renderWishlist(){
+  const wrap=document.getElementById('wishlistContent');
+  const items=products.filter(p=>wishlist.includes(p.id));
+  if(!items.length){
+    wrap.innerHTML=`<div class="wishlist-empty">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+      <p style="margin-top:1rem;">Your wishlist is empty.<br>Browse the shop and save items you love!</p>
+      <button class="btn-primary" onclick="showPage('shop')" style="margin-top:1.5rem;">Go to Shop</button>
+    </div>`;
+  } else {
+    let html=`<div class="wishlist-grid">`;
+    items.forEach((p,i)=>{html+=productCardHTML(p,i,i*30,true);});
+    html+=`</div>`;
+    wrap.innerHTML=html;
+    if(isOwner)document.querySelectorAll('#page-wishlist .product-card').forEach(c=>c.classList.add('owner-active'));
+  }
+}
+
+// ============================================================
+//  GALLERY
+// ============================================================
+function buildGallery(){
+  const grid=document.getElementById('galleryGrid');
+  const heights=['120px','160px','200px','140px','180px','110px','190px','150px','170px','130px','210px','155px'];
+  const colors=[
+    'linear-gradient(135deg,#1e332a,#3a5c4e)',
+    'linear-gradient(135deg,#243d30,#2d4a3e)',
+    'linear-gradient(135deg,#1a2e22,#3a5c4e)',
+    'linear-gradient(135deg,#2d4a3e,#1e332a)',
+    'linear-gradient(135deg,#3a5c4e,#243d30)',
+    'linear-gradient(135deg,#1e332a,#243d30)',
+  ];
+  let html='';
+  for(let i=0;i<24;i++){
+    const h=heights[i%heights.length];
+    const bg=colors[i%colors.length];
+    html+=`<div class="gallery-item"><div class="gallery-ph" style="height:${h};background:${bg};">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#a8d5a2" stroke-width="1.2" opacity="0.25"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+    </div></div>`;
+  }
+  grid.innerHTML=html;
+}
+
+// ============================================================
+//  FAQ
+// ============================================================
+function toggleFaq(el){
+  const item=el.parentElement;
+  item.classList.toggle('open');
+}
+
+// ============================================================
+//  OWNER
+// ============================================================
+function ownerAction(){
+  if(isOwner){openModal('ownerModal');}
+  else{openModal('pwModal');setTimeout(()=>document.getElementById('pwInput').focus(),100);}
+}
+
+function checkPw(){
+  const val=document.getElementById('pwInput').value;
+  if(val===OWNER_PASSWORD){
+    isOwner=true;
+    closeModal('pwModal');
+    document.getElementById('pwInput').value='';
+    document.getElementById('ownerBanner').classList.add('active');
+    document.getElementById('ownerFab').textContent='+ Add Product';
+    renderProducts();
+    showToast('Owner mode activated!');
+    openModal('ownerModal');
+  } else {
+    showToast('Wrong password!');
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function ownerLogout(){
+  isOwner=false;
+  document.getElementById('ownerBanner').classList.remove('active');
+  document.getElementById('ownerFab').textContent='+ Owner Panel';
+  renderProducts();
+  showToast('Logged out of owner mode.');
+}
+
+function addProduct(){
+  const name=document.getElementById('inp-name').value.trim();
+  const price=document.getElementById('inp-price').value.trim();
+  if(!name||!price){showToast('Please enter name and price!');return;}
+  const p={
+    id:'p_'+Date.now()+'_'+Math.random().toString(36).substr(2,6),
+    name,
+    category:document.getElementById('inp-cat').value,
+    price,
+    img:document.getElementById('inp-img').value.trim(),
+    desc:document.getElementById('inp-desc').value.trim(),
+    badge:document.getElementById('inp-badge').value,
+  };
+  products.unshift(p);
+  saveProducts();
+  closeModal('ownerModal');
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-price').value='';
+  document.getElementById('inp-img').value='';
+  document.getElementById('inp-desc').value='';
+  document.getElementById('inp-badge').value='';
+  renderProducts();
+  showPage('shop');
+  showToast('Product added successfully!');
+}
+
+function deleteProduct(id){
+  if(!confirm('Delete this product?'))return;
+  products=products.filter(p=>p.id!==id);
+  wishlist=wishlist.filter(w=>w!==id);
+  saveProducts();
+  saveWishlist();
+  renderProducts();
+  renderWishlist();
+  showToast('Product deleted.');
+}
+
+// ============================================================
+//  CONTACT
+// ============================================================
+function submitContact(){
+  showToast('Message sent! We will reply via Instagram.');
+  setTimeout(()=>window.open(INSTAGRAM_URL,'_blank'),800);
+}
+
+// ============================================================
+//  MODAL
+// ============================================================
+function openModal(id){document.getElementById(id).classList.add('active');}
+function closeModal(id){document.getElementById(id).classList.remove('active');}
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('active');});
+});
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+// ============================================================
+//  UTILS
+// ============================================================
+function escHTML(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
